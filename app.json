@@ -1,0 +1,17 @@
+{
+  "addons": [
+
+  ],
+  "buildpacks": [
+
+  ],
+  "description": "teste",
+  "env": {
+  },
+  "formation": {
+  },
+  "name": "msgsample",
+  "scripts": {
+  },
+  "stack": "heroku-18"
+}
