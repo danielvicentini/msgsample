@@ -6,6 +6,7 @@ Usage::
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import logging
 import json 
+import os
 
 # CLASSE WEBSERVER
 class S(BaseHTTPRequestHandler):
@@ -40,7 +41,7 @@ class S(BaseHTTPRequestHandler):
 
             # executa o robo com o comando apropriado
 
-def run(server_class=HTTPServer, handler_class=S, port=8080):
+def run(server_class=HTTPServer, handler_class=S, port=int(os.getenv('PORT',8080))):
     logging.basicConfig(level=logging.INFO)
     server_address = ('', port)
     httpd = server_class(server_address, handler_class)
