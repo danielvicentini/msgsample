@@ -27,6 +27,7 @@ api = WebexTeamsAPI(access_token='YTk3NDY2NzMtYTUwZC00MzRjLTgwMDAtMWE0YmYxMmJkN2
 # Webhook
 webhook_url="https://webexteamsmsg.herokuapp.com"
 webhook_name="chatops"
+botmail="infobot@sparkbot.io"
 
 #########################################################
 ## FUNCOES
@@ -378,9 +379,9 @@ class S(BaseHTTPRequestHandler):
         self.wfile.write("POST request for {}".format(self.path).encode('utf-8'))
 
         # Daniel Vicentini
-        # Aciona bot caso webhook seja identificado
+        # Aciona bot caso webhook seja identificado e mensagem postada nao seja do proprio bot
         content=json.loads(post_data.decode('utf-8'))
-        if content['name']==webhook_name:
+        if content['name']==webhook_name and content['data']['personEmail']!=botmail:
             
             # identifica id da mensagem
             msg_id=(content['data']['id'])
