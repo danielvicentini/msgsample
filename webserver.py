@@ -39,7 +39,7 @@ def CriaWebhook(webhook_name,webhook_url):
 	# Webhook para msgs
     api.webhooks.create(webhook_name,webhook_url,"messages","created")
 	# Webhook para nova sala criada - boas vindas
-    api.webhooks.create(webhook_name+"-new",webhook_url,"messages","created")
+    api.webhooks.create(webhook_name+"-new",webhook_url,"rooms","created")
 	
     return
 
@@ -270,7 +270,7 @@ def webextalk(msg_id):
     box=box.lower()
 
     # chamadas de acordo com os parametros
-    if box == "help":
+    if box == "ajuda":
         msg="Chatops Teams 1.0\nComandos disponiveis:\nhelp: esta ajuda\nprocura <item>: Procurar Asset\n"
         msg=msg+str("userid <email>: Identifica ID do usuario\nroomid <nome da sala>: Identifica ID da sala\nsalas: lista salas que pertenco\nexit: sai")
             
