@@ -1,4 +1,3 @@
-
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import logging
 import json 
@@ -15,8 +14,6 @@ from webexteamssdk import WebexTeamsAPI
 # Joao Peixoto
 # Sergio Polizer
 # Daniel Vicentini
-
-
 
 #########################################################
 ## VAR FIXAS
@@ -35,13 +32,16 @@ botmail="infobot@sparkbot.io"
 
 def CriaWebhook(webhook_name,webhook_url):
 
+
 	# Cria Webhook para receber msg via POST
     # Avisa Teams para gerar hooks para mensagems criadas somente
 
+	# Webhook para msgs
     api.webhooks.create(webhook_name,webhook_url,"messages","created")
-
+	# Webhook para nova sala criada - boas vindas
+    api.webhooks.create(webhook_name+"-new",webhook_url,"messages","created")
+	
     return
-
 
 def webexME():
 	# detalhes sobre mim
@@ -237,7 +237,7 @@ def procura(textosearch):
 			msg=msg+str("tipo: "+str(items['tags'][0]['type'])+"\n")
 			msg=msg+str("categoria: "+str(items['category']['name'])+"\n")
 
-			count = count +1
+			count=count+1
 		
 		resultado = resultado + str(msg)
 
@@ -266,6 +266,8 @@ def webextalk(msg_id):
     # Splita para encontrar detalhes dos parametros
     sp=box.split(" ")
     box=sp[0]
+	# converte para minusculas
+	box=box.lower()
 
     # chamadas de acordo com os parametros
     if box == "help":
@@ -345,15 +347,18 @@ def webextalk(msg_id):
 #########################################################
 ## LOGICA COMECA AQUI
 
-
 # inicia programa
-
-
 # Site
 
-# Cria webhook para receber POSTs
-CriaWebhook(webhook_name,webhook_url)
-
+# Valida existencia de webhook
+webhookok=0
+webhook=api.webhooks.list()
+for b in webhook:
+	 if b.name==webhook_name:
+		 webhookok=1
+# Webhook nao encontrado. Cria novos.
+if webhookok==0:
+	CriaWebhook(webhook_name,webhook_url)
 
 # http server
 class S(BaseHTTPRequestHandler):
@@ -373,16 +378,20 @@ class S(BaseHTTPRequestHandler):
     def do_POST(self):
         content_length = int(self.headers['Content-Length']) # <--- Gets the size of data
         post_data = self.rfile.read(content_length) # <--- Gets the data itself
-        logging.info("POST request,\nPath: %s\nHeaders:\n%s\n\nBody:\n%s\n",
-                str(self.path), str(self.headers), post_data.decode('utf-8'))
+        logging.info("POST request,\nPath: %s\nHeaders:\n%s\n\nBody:\n%s\n", str(self.path), str(self.headers), post_data.decode('utf-8'))
         self._set_response()
         self.wfile.write("POST request for {}".format(self.path).encode('utf-8'))
 
-        # Daniel Vicentini
-        # Aciona bot caso webhook seja identificado e mensagem postada nao seja do proprio bot
+        # Conteudo
         content=json.loads(post_data.decode('utf-8'))
+		
+		# Msg de boas vindas para novas salas criadas
+        if content['name']==webhook_name+"-new" and content['data']['personEmail']!=botmail:
+            novasala=(content['data']['roomId'])
+            webexmsgRoomviaID(novasala,"Olá! Digite ajuda para conhecer as opções.")
+		
+		# resposta as perguntas
         if content['name']==webhook_name and content['data']['personEmail']!=botmail:
-            
             # identifica id da mensagem
             msg_id=(content['data']['id'])
             # executa a logica conforme o pedido (interacao)
