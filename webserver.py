@@ -274,6 +274,9 @@ def OpiAssetDetail(textosearch):
 			msg=msg+str("Serial: "+str(items['tags'][0]['serial'])+"\n")
 			msg=msg+str("Tipo: "+str(items['tags'][0]['type'])+"\n")
 			msg=msg+str("Categoria: "+str(items['category']['name'])+"\n")
+			msg=msg+str("Local:"+str(items['site']['name'])+"\n")
+			msg=msg+str("Departamento:"+str(items['department']['name'])+"\n")	
+			# Devolve a zona identificada pelo Insights, caso exista
 			try:
 				zona=str(items['location']['zones'][0]['name'])
 				msg=msg+str("Local: Sala "+str(zona)+"\n")
