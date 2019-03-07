@@ -262,33 +262,29 @@ def OpiAssetDetail(textosearch):
 	response = requests.request("GET", url, headers=headers)
 	Jdata=json.loads(response.content)
 
-
 	# Laco que Faz a pesquisa baseado no grupo do dispositivo da base acima
 
-	# Permite procurar tudo caso esta keyword seja usada
-	
 	resultado=""
-	msg = "Nenhum Asset Encontrado"
-
+	
 	for items in Jdata:	
-		 
+		msg=""		
 		if textosearch in str(items['serial']).lower():
-
-			msg=""		
 			# Caso positivo encontrado monta a resposta
 			msg=msg+str("Asset:"+str(items['serial'])+"\n")	
 			msg=msg+str("Serial: "+str(items['tags'][0]['serial'])+"\n")
 			msg=msg+str("Tipo: "+str(items['tags'][0]['type'])+"\n")
 			msg=msg+str("Categoria: "+str(items['category']['name'])+"\n")
 			try:
-			 zona=str(items['location']['zones'][0]['name'])
-			 msg=msg+str("Local: Sala "+str(zona)+"\n")
+				zona=str(items['location']['zones'][0]['name'])
+				msg=msg+str("Local: Sala "+str(zona)+"\n")
 			except:
-			 pass
-			 msg=msg+str("Local não encontrado\n")		
+			  pass
+			  msg=msg+str("Local não encontrado\n")		
 			
-		resultado=resultado+str(msg)
+			resultado=resultado+str(msg)
 
+	if resultado=="":
+		resultado="Nenhum Asset encontrado"
 
 	return resultado
 
