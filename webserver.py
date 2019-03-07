@@ -267,7 +267,8 @@ def OpiAssetDetail(textosearch):
 
 	# Permite procurar tudo caso esta keyword seja usada
 	
-	msg="Nenhum resultado encontrado"
+	resultado=""
+	msg = "Nenhum Asset Encontrado"
 
 	for items in Jdata:	
 		 
@@ -286,7 +287,8 @@ def OpiAssetDetail(textosearch):
 			 pass
 			 msg=msg+str("Local não encontrado\n")		
 			
-	resultado=resultado+str(msg)			 
+		resultado=resultado+str(msg)
+
 
 	return resultado
 
