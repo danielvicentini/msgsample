@@ -286,7 +286,7 @@ def OpiAssetDetail(textosearch):
 			 pass
 			 msg=msg+str("Local não encontrado\n")		
 			
-	resultado=str(msg)			 
+	resultado=resultado+str(msg)			 
 
 	return resultado
 
@@ -435,8 +435,8 @@ def webextalk(msg_id):
     box=box.lower()
 
     # chamadas de acordo com os parametros
-    if box == "ajuda":
-        msg="Chatops Teams 1.0\nComandos disponiveis:\nhelp: esta ajuda\nProcura <nome>: Procurar local do Asset\nCategorias <nome ou tudo>: Lista Categorias cadastradas no OPI como nome identificado\nAsset <nome do asset>:apresenta detalhes do Asset\n"
+    if box == "ajuda" or box =="help":
+        msg="Chatops Teams 1.0\nComandos disponiveis:\nhelp: esta ajuda\nProcura <nome ou tudo>: Procurar local do Asset\nCategorias <nome ou tudo>: Lista Categorias cadastradas no OPI como nome identificado\nAsset <nome do asset>:apresenta detalhes do Asset\n"
         msg=msg+str("userid <email>: Identifica ID do usuario\nroomid <nome da sala>: Identifica ID da sala\nsalas: lista salas que pertenco\n")
             
     # chama funcao para procurar OPI somente se ouver 2 parametros
