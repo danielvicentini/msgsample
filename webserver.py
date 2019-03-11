@@ -563,21 +563,37 @@ class S(BaseHTTPRequestHandler):
 
         # Conteudo
         content=json.loads(post_data.decode('utf-8'))
-		
-		# Msg de boas vindas para novas salas criadas Não esta' funcionando
-        if content['name']==webhook_name+"-new" and content['data']['personEmail']!=botmail:
-            novasala=(content['data']['roomId'])
-            webexmsgRoomviaID(novasala,"Olá! Digite ajuda para conhecer as opções.")
-		
-		# resposta as perguntas
-        if content['name']==webhook_name and content['data']['personEmail']!=botmail:
-            # identifica id da mensagem
-            msg_id=(content['data']['id'])
-            # executa a logica conforme o pedido (interacao)
-            webextalk(msg_id)
 
+		#trata o código caso venha do OIP
+        try:
+            if content['rule']!="":
+                #identifica serial
+                asset=content['assets'][0]['serial']
+                #identifica msg
+                aviso=content['message']
+                #monta msg e manda para todas as salas webex onde robo esta presente
+                msg="Asset "+str(asset)+" informa: "+str(aviso)
+                webexmsgAll(msg)
+        except:
+            pass
+
+		# Msg de boas vindas para novas salas criadas Não esta' funcionando
+        #if content['name']==webhook_name+"-new" and content['data']['personEmail']!=botmail:
+        #    novasala=(content['data']['roomId'])
+        #    webexmsgRoomviaID(novasala,"Olá! Digite ajuda para conhecer as opções.")
+		
+		# resposta as perguntas que chegam para o robo
+        try:
+            if content['name']==webhook_name and content['data']['personEmail']!=botmail:
+                # identifica id da mensagem
+                msg_id=(content['data']['id'])
+                # executa a logica conforme o pedido (interacao)
+                webextalk(msg_id)
+        except:
+            pass
 
 def run(server_class=HTTPServer, handler_class=S, port=int(os.getenv('PORT',8080))):
+	# ou roda o server na porta 8080 ou pega a porta do ambiente (típico de PaaS)
     logging.basicConfig(level=logging.INFO)
     server_address = ('', port)
     httpd = server_class(server_address, handler_class)
