@@ -571,9 +571,10 @@ class S(BaseHTTPRequestHandler):
                 asset=content['assets'][0]['serial']
                 #identifica msg
                 aviso=content['message']
-                #monta msg e manda para todas as salas webex onde robo esta presente
+                #monta msg e manda para sala específica
                 msg="Asset "+str(asset)+" informa: "+str(aviso)
-                webexmsgAll(msg)
+                sala="CHATops Healthcare"
+                webexmsgRoom(sala,msg)
         except:
             pass
 
